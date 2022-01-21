@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Number Guessing Game</title>
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Number Guessing Game</h1>
+      <!-- Element for feedback -->
+      <p id="feedback">
+        This is a game where you can input a number below, with the goal of
+        guessing a randomly generated number between 1 and 100. Click the start
+        button to begin. Good luck!
+      </p>
+      <button id="startBtn">Start</button>
+      <p id="clock">Time: 15, Guesses: 10</p>
+      <form>
+        <!-- Element for a prompt -->
+        <label id="prompt" for="guess">Guess a number between 1 and 100</label>
+        <!-- Element for input of guess -->
+        <input
+          type="number"
+          name="guess"
+          id="guess"
+          placeholder="e.g. 64"
+          disabled
+        />
+        <!-- Element to submit guess -->
+        <button type="submit" id="submitBtn" disabled>Guess</button>
+      </form>
+      <ul id="gameHistory"></ul>
+    </main>
+  </body>
+</html>
