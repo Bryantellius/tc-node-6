@@ -1,19 +1,21 @@
 import * as React from "react";
 
-const Box = (props) => {
+const Box = ({ id, handleColorChange, width, height, color }) => {
+  console.log("Box - Render");
+
   return (
     <div
-      id={props.id}
-      onClick={props.handleColorChange}
+      id={id}
+      onClick={handleColorChange}
       style={{
-        width: props.width,
-        height: props.height,
-        backgroundColor: props.color,
+        width,
+        height,
+        backgroundColor: color,
         border: "1px solid black",
         display: "inline-block",
       }}
     >
-      <span>{props.color}</span>
+      <span>{color}</span>
     </div>
   );
 };

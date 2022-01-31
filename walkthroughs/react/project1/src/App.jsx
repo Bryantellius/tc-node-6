@@ -1,12 +1,14 @@
 import "./App.css";
 import { Component } from "react";
 import Box from "./components/Box";
+import LifecycleDisplay from "./components/LifecycleDisplay";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    console.log("App - Constructor");
 
-    const numBoxes = 50;
+    const numBoxes = 10;
     const boxes = [];
 
     for (let i = 0; i < numBoxes; i++) {
@@ -26,6 +28,7 @@ class App extends Component {
       boxes,
       min: 0,
       max: 255,
+      display: true,
     };
 
     // bind methods to this
@@ -66,7 +69,30 @@ class App extends Component {
     this.setState({ boxes: newBoxes });
   }
 
+  componentDidMount() {
+    // After first render
+    console.log("App - Mount");
+
+    setTimeout(() => {
+      this.setState({ display: false });
+    }, 10);
+  }
+
+  componentDidUpdate() {
+    // After each re-render
+    console.log("App - Update");
+  }
+
+  componentWillUnmount() {
+    // After component is removed from the DOM
+    console.log("App - Unmount");
+  }
+
   render() {
+    console.log("App - Render");
+
+    let { min, max, boxes, display } = this.state;
+
     return (
       <main
         style={{
@@ -77,13 +103,14 @@ class App extends Component {
         }}
       >
         <h1>React: State and Props</h1>
+        {display ? <LifecycleDisplay /> : null}
         <div className="form-group">
           <label htmlFor="min">Min</label>
           <input
             type="number"
             name="min"
             id="min"
-            value={this.state.min}
+            value={min}
             onChange={(e) =>
               this.setState({
                 min: isNaN(parseInt(e.target.value))
@@ -99,7 +126,7 @@ class App extends Component {
             type="number"
             name="max"
             id="max"
-            value={this.state.max}
+            value={max}
             onChange={(e) =>
               this.setState({
                 max: isNaN(parseInt(e.target.value))
@@ -113,7 +140,7 @@ class App extends Component {
           Randomize All
         </button>
         <div className="App">
-          {this.state.boxes.map((box) => {
+          {boxes.map((box) => {
             return (
               <Box
                 key={box.id}

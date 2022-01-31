@@ -1,64 +1,56 @@
 console.log("Hello World!");
 
-class Placement {
-  constructor() {
-    this.wasHit = false;
-    this.hasShip = false;
-  }
+// Immutability
+let scores = [
+  { student: "Ben", score: 88 },
+  { student: "Seth", score: 91 },
+  { student: "Cruz", score: 100 },
+];
+
+function updateScore(scores, student, newScore) {
+  // Do not change the param array itself, but return a altered, new array
+  // This is changing the param value..
+  // scores.forEach((person) => {
+  //   if (person.student == student) {
+  //     person.score = newScore;
+  //   }
+  // });
+
+  // Use .map to return a new array that does not mutate the existing array value (param)
+  return scores.map((person) => {
+    if (person.student == student) {
+      person.score = newScore;
+    }
+
+    return person;
+  });
 }
 
-// Nested Arrays
-// An array of array values
+scores = updateScore(scores, "Ben", 90);
 
-let totalShips = Math.floor(Math.random() * 5) + 1; // 1-5
-let boardSize = 5; // 5 X 5
-let score = 0;
+// Reference Values (leads to the .bind reason in class components)
 
-let generatedShips = 0;
+// Value vs Reference Data Types
+// Value Data Types: String, number, boolean, null, undefined, symbol, bigint
+// Reference Data Types: Objects (arrays, functions, etc)
 
-let board = generateBoard(boardSize, totalShips);
+let number1 = { value: 10 };
+let number2 = number1; // { value: 10 }
 
-// Battle Ship Game
+number1.value += 10;
+console.log(number1); // 20
+console.log(number2); // 20
 
-do {
-  let hit = prompt(
-    "Choose where to fire:\nFormat is Letter (A-E), Number (1-5)\nEx: 'D4'"
-  );
-  let row = hit[0].charCodeAt(0) - 65; // "D"
-  let col = hit[1] - 1; // "4"
-  if (row < 0 || row > 4 || col < 0 || col > 4) {
-    alert(
-      "Invalid Hit Placement\nFormat is Letter (A-E), Number (1-5)\nEx: 'D4'"
-    );
-  } else {
-    score++;
-    board[row][col].wasHit = true;
-    if (board[row][col].hasShip) {
-      totalShips--;
-      alert("You scored a hit!");
-    } else {
-      alert("Miss!");
-    }
-  }
-} while (totalShips);
+number2.value = "now they are both strings";
+console.log(number1); // "now they are both strings"
+console.log(number2); // "now they are both strings"
 
-alert("You won with a score of " + score);
+// Object Destructuring
+// Given an object, create a variable with the property name, and assign it the property value
 
-function generateBoard(boardSize, totalShips) {
-  let newBoard = [];
-  for (let i = 0; i < boardSize; i++) {
-    let row = [];
-    for (let o = 0; o < boardSize; o++) {
-      let hasShip = Math.round(Math.random()); // 0 or 1, false or true
-      let placement = new Placement();
-      if (hasShip && generatedShips < totalShips) {
-        generatedShips++;
-        placement.hasShip = true;
-      }
-      row.push(placement);
-    }
-    newBoard.push(row);
-  }
+let { value } = number1;
+console.log(value);
 
-  return newBoard;
-}
+// Array Destructuring
+let [ben, seth, cruz] = scores;
+console.log(ben);
