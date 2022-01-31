@@ -46,7 +46,7 @@ function checkAge(name, age) {
 
 let favVeggies = ["squash", "zucchini", "celery", "tomato"];
 
-favVeggiees.forEach(function (veggie) {
+favVeggies.forEach(function (veggie) {
     console.log(veggie);
 });
 
