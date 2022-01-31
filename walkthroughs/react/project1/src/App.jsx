@@ -1,159 +1,81 @@
-import "./App.css";
 import { Component } from "react";
-import Box from "./components/Box";
-import LifecycleDisplay from "./components/LifecycleDisplay";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    console.log("App - Constructor");
 
-    const numBoxes = 10;
-    const boxes = [];
-
-    for (let i = 0; i < numBoxes; i++) {
-      boxes.push({
-        id: i,
-        color: `rgb(${this.getRandomNumber(0, 255)}, ${this.getRandomNumber(
-          0,
-          255
-        )}, ${this.getRandomNumber(0, 255)})`,
-        width: 180,
-        height: 180,
-      });
-    }
-
-    // set default state
     this.state = {
-      boxes,
-      min: 0,
-      max: 255,
-      display: true,
+      list: [],
+      searchUser: "Bryantellius",
     };
 
-    // bind methods to this
-    this.handleColorChange = this.handleColorChange.bind(this);
-  }
-
-  /**
-   * Returns a random number between the min and the max number provided.
-   * @param {number} min
-   * @param {number} max
-   * @returns {number} random number
-   */
-  getRandomNumber(min = 0, max = 100) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
-  /**
-   * Refers to the event.target.id to update the color of the box that was clicked, and updates state to trigger a re-render.
-   * @param {HTMLClickEvent} event
-   */
-  handleColorChange(event, all = false) {
-    const newBoxes = this.state.boxes.map((box) => {
-      if (box.id == event.target.id || all) {
-        box.color = `rgb(${this.getRandomNumber(
-          this.state.min,
-          this.state.max
-        )}, ${this.getRandomNumber(
-          this.state.min,
-          this.state.max
-        )}, ${this.getRandomNumber(this.state.min, this.state.max)})`;
-        box.width++;
-        box.height++;
-      }
-
-      return box;
-    });
-
-    this.setState({ boxes: newBoxes });
+    this.controller = new AbortController();
   }
 
   componentDidMount() {
-    // After first render
-    console.log("App - Mount");
-
-    setTimeout(() => {
-      this.setState({ display: false });
-    }, 10);
+    this.handleSearch();
   }
 
-  componentDidUpdate() {
-    // After each re-render
-    console.log("App - Update");
+  handleSearch = (event) => {
+    if (event) event.preventDefault();
+
+    fetch("https://www.codewars.com/api/v1/users/" + this.state.searchUser, {
+      signal: this.controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.username && !data.success)
+          return this.flashMessage(data.reason || "User does not exist");
+        let tempList = Array.from(this.state.list);
+        tempList.push(data);
+        this.setState({ list: tempList });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  flashMessage(msg) {
+    let flash = document.createElement("div");
+    flash.style =
+      "background-color: tomato; color: white; border-radius: 8px; text-align: center; top: 0; right: 0; position: fixed;";
+    flash.textContent = msg;
+    document.body.appendChild(flash);
+    setTimeout(() => {
+      document.body.removeChild(flash);
+    }, 5000);
   }
 
   componentWillUnmount() {
-    // After component is removed from the DOM
-    console.log("App - Unmount");
+    this.controller.abort();
   }
 
   render() {
-    console.log("App - Render");
-
-    let { min, max, boxes, display } = this.state;
-
     return (
-      <main
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          textAlign: "center",
-        }}
-      >
-        <h1>React: State and Props</h1>
-        {display ? <LifecycleDisplay /> : null}
-        <div className="form-group">
-          <label htmlFor="min">Min</label>
-          <input
-            type="number"
-            name="min"
-            id="min"
-            value={min}
-            onChange={(e) =>
-              this.setState({
-                min: isNaN(parseInt(e.target.value))
-                  ? 0
-                  : parseInt(e.target.value),
-              })
-            }
-          />
+      <div className="App">
+        <h1>node-6 Codewars</h1>
+        <div>
+          <form onSubmit={this.handleSearch}>
+            <input
+              type="text"
+              placeholder="Bryantellius"
+              onChange={(e) => this.setState({ searchUser: e.target.value })}
+              value={this.state.searchUser}
+            />
+            <button>Search</button>
+          </form>
         </div>
-        <div className="form-group">
-          <label htmlFor="max">Max</label>
-          <input
-            type="number"
-            name="max"
-            id="max"
-            value={max}
-            onChange={(e) =>
-              this.setState({
-                max: isNaN(parseInt(e.target.value))
-                  ? 0
-                  : parseInt(e.target.value),
-              })
-            }
-          />
-        </div>
-        <button onClick={(e) => this.handleColorChange(e, true)}>
-          Randomize All
-        </button>
-        <div className="App">
-          {boxes.map((box) => {
+        <hr />
+        <div>
+          {this.state.list.map((user) => {
             return (
-              <Box
-                key={box.id}
-                color={box.color}
-                id={box.id}
-                handleColorChange={this.handleColorChange}
-                height={box.height}
-                width={box.width}
-              />
+              <div key={user.username}>
+                <h2>{user.username}</h2>
+                <p>Score: {user.honor}</p>
+                <p>Rank: {user.ranks.overall.rank}</p>
+              </div>
             );
           })}
         </div>
-      </main>
+      </div>
     );
   }
 }
