@@ -1,16 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const Func = (props) => {
-  const [title, setTitle] = useState("Hello World!");
-  const [count, setCount] = useState(0);
+const FuncFilms = (props) => {
   const [films, setFilms] = useState([]);
-
   const controller = new AbortController();
-
-  const updateTitle = (event) => {
-    setTitle(document.querySelector("#titleFunc").value);
-    setCount(count + 1);
-  };
 
   useEffect(() => {
     fetch("https://ghibliapi.herokuapp.com/films", {
@@ -21,21 +13,54 @@ const Func = (props) => {
       .catch((err) => alert(err.message));
 
     return () => controller.abort();
-  }, []); // only call the callback on initial render
+  }, []);
+
+  const updateFilm = (event) => {
+    console.log("Updating film lists");
+
+    const list = films.map((film) => {
+      if (event.target.id == film.id) {
+        film.seen = true;
+      }
+
+      return film;
+    });
+    setFilms(list);
+  };
 
   return (
     <div>
-      <h1>{title}</h1>
-      <p>{props.desc}</p>
-      <input type="text" name="title" id="titleFunc" />
-      <button onClick={updateTitle}>Update Func Title {count} times</button>
+      <h2>{props.title}</h2>
       <ul>
-        {films.map((film) => (
-          <li key={film.id}>{film.title}</li>
-        ))}
+        {films
+          .sort((filmA, filmB) => {
+            if (filmA.seen == undefined && filmB.seen) {
+              return -1;
+            } else {
+              if (
+                (filmA.seen && filmB.seen) ||
+                (filmA.seen == undefined && filmB.seen == undefined)
+              ) {
+                if (filmA.rt_score == filmB.rt_score) {
+                  return filmA.title - filmB.title;
+                } else return filmA.rt_score - filmB.rt_score;
+              } else return 1;
+            }
+          })
+          .map((film) => (
+            <li key={film.id}>
+              {film.title} {film.rt_score}{" "}
+              <input
+                id={film.id}
+                type="checkbox"
+                value={film.seen}
+                onChange={updateFilm}
+              />
+            </li>
+          ))}
       </ul>
     </div>
   );
 };
 
-export default Func;
+export default FuncFilms;

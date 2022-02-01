@@ -9,8 +9,8 @@ class App extends Component {
       <div className="App-header">
         <div>
           <h1>Class vs Functional Components</h1>
-          <Cla desc="A component that can handle state internally." />
-          <Func desc="A component that will need hooks to access state." />
+          {/* <Cla title="Films by Class Component" /> */}
+          <Func title="Films by Functional Component" />
         </div>
       </div>
     );
