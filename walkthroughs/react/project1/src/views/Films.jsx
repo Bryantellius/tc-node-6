@@ -10,6 +10,7 @@ const Films = () => {
   const fetchList = async () => {
     let response = await fetch("https://ghibliapi.herokuapp.com/films");
     let data = await response.json();
+    console.log(data.length);
     setList(data);
     setFilteredList(data);
     setItemIndex(0);
@@ -59,7 +60,9 @@ const Films = () => {
         <div className="card" key={filteredList[itemIndex].id}>
           <div className="card-img">
             <img src={filteredList[itemIndex].movie_banner} alt="" />
-            <span className="float-top-right">{filteredList[itemIndex].release_date}</span>
+            <span className="float-top-right">
+              {filteredList[itemIndex].release_date}
+            </span>
           </div>
           <div className="card-body">
             <p>{filteredList[itemIndex].description}</p>

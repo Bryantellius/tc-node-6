@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const People = () => {
   const [list, setList] = useState([]);
@@ -6,6 +7,7 @@ const People = () => {
   const fetchList = async () => {
     let response = await fetch("https://ghibliapi.herokuapp.com/people");
     let data = await response.json();
+    console.log(data.length);
     setList(data);
   };
 
@@ -21,7 +23,7 @@ const People = () => {
           return (
             <div key={item.id} className="card">
               <div className="card-body">
-                <p>{item.name}</p>
+                <Link to={item.id}>{item.name}</Link>
               </div>
             </div>
           );

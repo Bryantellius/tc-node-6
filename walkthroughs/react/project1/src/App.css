@@ -103,3 +103,20 @@ nav {
 .nav-link > a:hover {
   color: #0097c8;
 }
+
+/* THEMES */
+.theme-primary {
+  background: linear-gradient(#333, #0094c8);
+}
+.theme-secondary {
+  background: linear-gradient(#333, gray);
+}
+.theme-retro {
+  background: linear-gradient(#333, #270091, #b700ff);
+}
+.theme-purple {
+  background: linear-gradient(#333, #270091);
+}
+.theme-dark {
+  background: linear-gradient(#333, #002431);
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Vehicles = () => {
   const [list, setList] = useState([]);
@@ -6,7 +7,10 @@ const Vehicles = () => {
   useEffect(() => {
     fetch("https://ghibliapi.herokuapp.com/vehicles")
       .then((res) => res.json())
-      .then((data) => setList(data))
+      .then((data) => {
+        setList(data);
+        console.log(data.length);
+      })
       .catch((err) => console.error(err));
   }, []);
 
@@ -18,7 +22,7 @@ const Vehicles = () => {
           return (
             <div className="card" key={item.id}>
               <div className="card-body">
-                <p>{item.name}</p>
+                <Link to={item.id}>{item.name}</Link>
               </div>
             </div>
           );

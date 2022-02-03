@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import Theme from "./Theme";
 
-const Nav = () => {
+const Nav = (props) => {
   return (
     <nav>
       <ul className="nav-list">
@@ -24,6 +25,9 @@ const Nav = () => {
         </li>
         <li className="nav-link">
           <Link to="to-do">To Do App</Link>
+        </li>
+        <li className="nav-link">
+          <Theme {...props} />
         </li>
       </ul>
     </nav>
