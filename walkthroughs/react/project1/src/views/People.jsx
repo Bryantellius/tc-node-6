@@ -9,7 +9,6 @@ const People = () => {
   const fetchList = async () => {
     let response = await fetch("https://ghibliapi.herokuapp.com/people");
     let data = await response.json();
-    console.log(data.length);
     setOriginalList(data);
     setFilteredList(data);
   };

@@ -11,8 +11,6 @@ const App = () => {
     setTheme,
   };
 
-  console.log(routes);
-
   return (
     <BrowserRouter>
       <div className={`App theme-${theme}`}>

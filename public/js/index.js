@@ -12,25 +12,19 @@ console.log(add(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)); // 55
 
 // Spread Operator
 // Spreads out individual values from an array
-const state = ["state", (newState) => console.log(newState)];
+let nums = [2, 3, 4];
+let completeNums = [1, ...nums, 5];
 
-function actOnState(state, setState) {
-  setState("New Value");
-}
-
-actOnState(...state);
+console.log(completeNums); // [1, 2, 3, 4, 5]
 
 // YOU CAN EVEN SPREAD OBJECT PROPERY/VALUES
-let obj = {
-  name: "Ben",
-  value: "On an object",
-  city: "Hoover",
+let values = {
+  title: "Hello World!",
+  count: 0,
 };
 
-let newObj = {
-  ...obj,
-  city: "Birmingham",
-  state: "Alabama",
-};
+let reactElement = {
+  props: { ...values }
+}
 
 console.log(newObj);
