@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { AppContext } from "../data/context";
+
 const Task = ({ task, onClick }) => {
+  const { isOnline, setIsOnline } = useContext(AppContext);
+
   const due = () => {
     let date = task.due_date ? new Date(task.due_date) : null;
     let today = new Date();
@@ -11,6 +16,8 @@ const Task = ({ task, onClick }) => {
       return `Due on ${date.toLocaleDateString()}`;
     }
   };
+
+  console.log("From context: ", isOnline);
 
   return (
     <div id={task.id} className="card" onClick={(e) => onClick(task.id)}>
