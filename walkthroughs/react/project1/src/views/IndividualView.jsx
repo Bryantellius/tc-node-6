@@ -7,8 +7,9 @@ const IndividualView = () => {
   const navigate = useNavigate();
   const params = useParams();
   const { pathname } = useLocation();
-
+  
   const endpoint = pathname.split("/")[1];
+  const backLocation = "../" + endpoint;
 
   useEffect(() => {
     fetch(`https://ghibliapi.herokuapp.com/${endpoint}/${params.id}`)
@@ -23,7 +24,7 @@ const IndividualView = () => {
     return (
       <div className="task-container">
         <div className="card">
-          <button onClick={() => navigate(-1)}>Back</button>
+          <button onClick={() => navigate(backLocation)}>Back</button>
           <div className="card-body">
             <h1>{item.name || item.title}</h1>
             <code>
