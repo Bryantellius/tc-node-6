@@ -1,24 +1,12 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import withStudioGhibliData from "../components/StudioGhibliWrapper";
 
-const Locations = () => {
-  const [list, setList] = useState([]);
-
-  useEffect(() => {
-    fetch("https://ghibliapi.herokuapp.com/locations")
-      .then((res) => res.json())
-      .then((data) => {
-        setList(data);
-        console.log(data.length);
-      })
-      .catch((err) => console.error(err));
-  }, []);
-
+const Locations = ({ data }) => {
   return (
     <div>
       <h1>Studio Ghibli Locations</h1>
       <div className="task-container">
-        {list.map((item) => {
+        {data.map((item) => {
           return (
             <div className="card" key={item.id}>
               <div className="card-body">
@@ -32,4 +20,7 @@ const Locations = () => {
   );
 };
 
-export default Locations;
+export default withStudioGhibliData(
+  Locations,
+  "https://ghibliapi.herokuapp.com/locations"
+);
