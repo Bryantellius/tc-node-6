@@ -6,6 +6,7 @@ import Vehicles from "../views/Vehicles";
 import Species from "../views/Species";
 import IndividualView from "../views/IndividualView";
 import Tasks from "../views/Tasks";
+import Signup from "../views/Signup";
 
 class Route {
   constructor(path, title, element, isNavLink = false) {
@@ -31,4 +32,5 @@ export const routes = [
   new Route("species", "Species", <Species />, true),
   new Route("species/:id", "Individual View", <IndividualView />),
   new Route("to-do", "To-Do", <Tasks />, true),
+  new Route("signup", "Signup", <Signup />, true),
 ];
