@@ -1,45 +1,25 @@
-// ROUTES:
-// home
-// about
-// contact
-// not found
+const fs = require("fs");
+const path = require("path");
 
-const http = require("http");
-const port = 3001;
+let filePath = path.join(__dirname, "../../reviews/css-flexbox-grid.md");
 
-http
-  .createServer((request, response) => {
-    const { url, method } = request;
-    const chunksArray = [];
+fs.readFile(filePath, (err, content) => {
+  if (err) return console.error(err);
 
-    request.on("data", (chunk) => chunksArray.push(chunk));
+  let trimmedContent = content.toString().replace(/\W|_|\d/g, "");
 
-    request.on("end", () => {
-      let statusCode = 200;
-      let responseBody;
-      let contentType = "text/html";
+  let results = trimmedContent.split("").reduce((values, char) => {
+    let charLower = char.toLowerCase();
+    values[charLower] = values[charLower] ? values[charLower] + 1 : 1;
+    return values;
+  }, {});
 
-      switch (method + url) {
-        case "GET/":
-          responseBody = "<h1>Home</h1>";
-          break;
-        case "GET/about":
-          responseBody = "<h1>About</h1>";
-          break;
-        case "POST/contact":
-          let requestBody = JSON.parse(Buffer.concat(chunksArray).toString());
-          console.log(requestBody);
-          responseBody = `<h1>Thank you for contacting me. I'll reach out to you soon, ${requestBody.name}</h1>`;
-          break;
-        default:
-          // 404 not found
-          statusCode = 404;
-          responseBody = "<h1>Page Not Found</h1><a href='/'>Try Home</a>";
-      }
+  let finalResults = Object.entries(results).sort((a, b) => b[1] - a[1]); // [[letter, count], ...]
 
-      response.writeHead(statusCode, { "Content-Type": contentType });
-      response.write(responseBody);
-      response.end();
-    });
-  })
-  .listen(port, () => console.log(`Server listening on port ${port}...`));
+  console.log(
+    finalResults[0][0] +
+      " was the most common letter, used " +
+      finalResults[0][1] +
+      " times."
+  );
+});
