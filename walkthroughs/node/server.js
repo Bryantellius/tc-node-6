@@ -1,52 +1,45 @@
-// import http from "http"
+// ROUTES:
+// home
+// about
+// contact
+// not found
+
 const http = require("http");
-const fs = require("fs");
 const port = 3001;
 
-const myServer = http.createServer(requestHandler);
+http
+  .createServer((request, response) => {
+    const { url, method } = request;
+    const chunksArray = [];
 
-myServer.listen(port, () => console.log(`Server listening on port ${port}`));
+    request.on("data", (chunk) => chunksArray.push(chunk));
 
-function requestHandler(req, res) {
-  const { url, method } = req;
-  const bufferChunks = [];
+    request.on("end", () => {
+      let statusCode = 200;
+      let responseBody;
+      let contentType = "text/html";
 
-  req.on("data", (chunk) => bufferChunks.push(chunk));
-
-  req.on("end", () => {
-    let statusCode = 200;
-    let contentType = "text/html";
-    let resBody = "<h1>404 Not Found</h1><a href='/'>Try Here</a>";
-
-    try {
       switch (method + url) {
         case "GET/":
-          resBody = "<h1>Home</h1><a href='/about'>About</a>";
+          responseBody = "<h1>Home</h1>";
           break;
         case "GET/about":
-          contentType = "application/json";
-          resBody = JSON.stringify({ name: "Ben Bryant", city: "Hoover" });
+          responseBody = "<h1>About</h1>";
           break;
-        case "POST/echo":
-          contentType = "application/json";
-          let parsedRequestBody = JSON.parse(
-            Buffer.concat(bufferChunks).toString()
-          );
-          parsedRequestBody.reachedServer = true;
-          parsedRequestBody.reachedServerAt = new Date().toString();
-          resBody = JSON.stringify(parsedRequestBody);
+        case "POST/contact":
+          let requestBody = JSON.parse(Buffer.concat(chunksArray).toString());
+          console.log(requestBody);
+          responseBody = `<h1>Thank you for contacting me. I'll reach out to you soon, ${requestBody.name}</h1>`;
           break;
         default:
+          // 404 not found
           statusCode = 404;
+          responseBody = "<h1>Page Not Found</h1><a href='/'>Try Home</a>";
       }
 
-      res.writeHead(statusCode, { "Content-Type": contentType });
-      res.write(resBody);
-      res.end();
-    } catch (error) {
-      res.writeHead(500, { "Content-Type": "text/html" });
-      res.write("<h1>Server Error. Try Again later.</h1>");
-      res.end();
-    }
-  });
-}
+      response.writeHead(statusCode, { "Content-Type": contentType });
+      response.write(responseBody);
+      response.end();
+    });
+  })
+  .listen(port, () => console.log(`Server listening on port ${port}...`));
