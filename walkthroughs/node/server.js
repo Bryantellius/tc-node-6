@@ -1,25 +1,26 @@
 const fs = require("fs");
 const path = require("path");
+const http = require("http");
 
-let filePath = path.join(__dirname, "../../reviews/css-flexbox-grid.md");
+const routes = require("./routes");
 
-fs.readFile(filePath, (err, content) => {
-  if (err) return console.error(err);
+const port = 5000;
 
-  let trimmedContent = content.toString().replace(/\W|_|\d/g, "");
+http
+  .createServer((req, res) => {
+    let route = routes[req.method + req.url] || routes["*"];
 
-  let results = trimmedContent.split("").reduce((values, char) => {
-    let charLower = char.toLowerCase();
-    values[charLower] = values[charLower] ? values[charLower] + 1 : 1;
-    return values;
-  }, {});
+    console.log(req.url, req.method, route);
 
-  let finalResults = Object.entries(results).sort((a, b) => b[1] - a[1]); // [[letter, count], ...]
+    fs.readFile(route.filePath, (err, contents) => {
+      if (err) {
+        console.error(err);
+        return res.end("Failed");
+      }
 
-  console.log(
-    finalResults[0][0] +
-      " was the most common letter, used " +
-      finalResults[0][1] +
-      " times."
-  );
-});
+      res.writeHead(route.statusCode, { "Content-Type": route.contentType });
+      res.write(contents);
+      res.end();
+    });
+  })
+  .listen(port, () => console.log(`Server listening on port ${port}`));
