@@ -26,6 +26,9 @@ form.addEventListener("submit", async (event) => {
     } else {
       alert("The server is having trouble. Try again later!");
     }
+
+    name.value = "";
+    message.value = "";
   } catch (e) {
     console.error(e);
     alert(

@@ -2,6 +2,7 @@ const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
+const { MIMETypes } = require("./utils");
 const routes = require("./routes");
 
 const port = 5000;
@@ -11,18 +12,15 @@ http
     let parsedPath = path.parse(req.url);
 
     if (parsedPath.ext) {
-      console.log(
-        path.join(__dirname, "./public", parsedPath.dir + parsedPath.base)
-      );
-
       fs.readFile(
-        path.join(__dirname, "./public", parsedPath.dir + parsedPath.base),
+        path.join(__dirname, "public", parsedPath.dir, parsedPath.base),
         (err, contents) => {
           if (err) return res.end("Failed to load static asset");
 
+          let contentType = MIMETypes[parsedPath.ext];
+
           res.writeHead(200, {
-            "Content-Type":
-              parsedPath.ext == ".js" ? "application/javascript" : "text/css",
+            "Content-Type": contentType,
           });
           res.write(contents);
           res.end();
