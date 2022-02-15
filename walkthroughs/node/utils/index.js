@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 function updateContactFile(contact) {
   let filePath = path.join(__dirname, "../misc/contacts.csv");
@@ -27,7 +28,24 @@ let MIMETypes = {
   ".html": "text/html",
 };
 
+function handleErrorResponse(err, res) {
+  console.error(err);
+
+  res.writeHead(err.statusCode || 500, {
+    "Content-Type": "application/json",
+  });
+  res.write(
+    JSON.stringify({
+      name: err.name || "Unknown Error",
+      msg: err.message || "An unexpected error has occurred.",
+      _at: new Date().toString(),
+    })
+  );
+  res.end();
+}
+
 module.exports = {
   MIMETypes,
   updateContactFile,
+  handleErrorResponse,
 };

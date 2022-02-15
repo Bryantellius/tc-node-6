@@ -17,7 +17,27 @@
         </ul>
       </nav>
       <h1>Home</h1>
-      <img src="./images/computer-backdrop.jpg" alt="" />
+      <button onclick="saveMarkdown()">Save</button>
+      <textarea name="editor" id="editor" cols="100" rows="50"></textarea>
     </div>
+    <script>
+      let ta = document.querySelector("#editor");
+
+      fetch("/api/all-react")
+        .then((res) => res.text())
+        .then((data) => (ta.value = data))
+        .catch((err) => alert(err.message));
+
+      function saveMarkdown() {
+        fetch("/api/save", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: "all-react.md", content: ta.value }),
+        })
+          .then((res) => res.json())
+          .then((data) => alert(data.message))
+          .catch((err) => alert("Failed to update file"));
+      }
+    </script>
   </body>
 </html>

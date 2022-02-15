@@ -1,5 +1,5 @@
+const fs = require("fs");
 const path = require("path");
-const { updateContactFile } = require("../utils");
 
 const routes = {
   "GET/": {
@@ -22,14 +22,44 @@ const routes = {
     filePath: path.join(__dirname, "../public/contact.html"),
     contentType: "text/html",
   },
+  "GET/api/all-react": {
+    statusCode: 200,
+    filePath: path.join(__dirname, "../../../reviews/all-react.md"),
+    contentType: "text/md",
+  },
   "POST/contact": {
     statusCode: 200,
     filePath: null,
     contentType: "application/json",
-    response(reqBody) {
-      updateContactFile(reqBody);
-      return JSON.stringify({
-        message: `Thank you for the message, ${reqBody.name}. We'll be in contact soon!`,
+    response(contact, res) {
+      let body = JSON.stringify({
+        message: `Thank you for the message, ${contact.name}. We'll be in contact soon!`,
+      });
+
+      res.writeHead(this.statusCode, {
+        "Content-Type": this.contentType,
+      });
+      res.write(body);
+      res.end();
+    },
+  },
+  "PUT/api/save": {
+    statusCode: 200,
+    filePath: null,
+    contentType: "application/json",
+    response(file, res) {
+      fs.writeFile(file.name, file.content, (err) => {
+        if (err) return res.emit("error", err);
+
+        let body = JSON.stringify({
+          message: `File, ${file.name}, has been saved!`,
+        });
+
+        res.writeHead(this.statusCode, {
+          "Content-Type": this.contentType,
+        });
+        res.write(body);
+        res.end();
       });
     },
   },
