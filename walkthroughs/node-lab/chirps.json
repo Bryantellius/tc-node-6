@@ -1,0 +1,31 @@
+{
+  "chirps": [
+    {
+      "author": "Ben",
+      "content": "this is my chirp",
+      "date": "Thu Feb 17 2022 13:28:10 GMT-0600 (Central Standard Time)"
+    },
+    {
+      "author": "Tanner",
+      "content": "this is my chirp",
+      "date": "Thu Feb 17 2022 13:28:10 GMT-0600 (Central Standard Time)"
+    },
+    {
+      "author": "Cruz",
+      "content": "this is my chirp",
+      "date": "Thu Feb 17 2022 13:28:10 GMT-0600 (Central Standard Time)"
+    },
+    {
+      "author": "Michael",
+      "content": "this is my chirp",
+      "date": "Thu Feb 17 2022 13:28:10 GMT-0600 (Central Standard Time)"
+    },
+    {
+      "author": "Seth",
+      "content": "this is my chirp",
+      "date": "Thu Feb 17 2022 13:28:10 GMT-0600 (Central Standard Time)"
+    }
+  ],
+  "count": 5,
+  "title": "Chirps"
+}
