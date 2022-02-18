@@ -1,8 +1,6 @@
 console.log("Hello World!");
 
-const a = (x, y) => {
-  return x + y;
-};
+const a = [1, 2, 3];
+const b = [1, 2, 3];
 
-// Implicit return
-const b = (x, y) => x + y;
+console.log(a == b); // 

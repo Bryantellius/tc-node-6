@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokemon</title>
+  </head>
+  <body>
+    <h1>Pokemon</h1>
+    <ul></ul>
+  </body>
+  <script>
+    let ul = document.querySelector("ul");
+
+    fetch("/api/pokemon")
+      .then((res) => res.json())
+      .then((data) => {
+        for (let pokemon of data.pokemon) {
+          let li = document.createElement("li");
+          li.innerHTML = `<p>${pokemon.name}</p><img src='${pokemon.img}' />`;
+          ul.appendChild(li);
+        }
+      })
+      .catch((err) => alert(err.message));
+  </script>
+</html>

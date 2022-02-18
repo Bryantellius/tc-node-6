@@ -1,5 +1,5 @@
 {
-  "name": "expressjs",
+  "name": "express_routing",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "isomorphic-fetch": "^3.0.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
