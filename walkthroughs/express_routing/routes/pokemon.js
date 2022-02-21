@@ -69,4 +69,66 @@ router.post("/", (req, res, next) => {
   }
 });
 
+router.put("/", (req, res, next) => {
+  try {
+    let { id } = req.body;
+
+    if (!id)
+      res
+        .status(400)
+        .json({ msg: "You must provide an 'id' property with your request." });
+    else {
+      fs.readFile(pokemonFile, (err, contents) => {
+        if (err) next(err);
+
+        let data = JSON.parse(contents.toString());
+
+        data.pokemon = data.pokemon.map((poke) => {
+          if (poke.id == id) {
+            return { ...poke, ...req.body };
+          } else return poke;
+        });
+
+        fs.writeFile(pokemonFile, JSON.stringify(data), (err) => {
+          if (err) next(err);
+
+          res.json({
+            msg: `Successfully updated pokemon with '${id}' id`,
+            when: new Date().toString(),
+          });
+        });
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.delete("/:id", (req, res, next) => {
+  let { id } = req.params;
+
+  if (!id)
+    res
+      .status(400)
+      .json({ msg: "You must provide a pokemon 'id' property to delete." });
+  else {
+    fs.readFile(pokemonFile, (err, contents) => {
+      if (err) next(err);
+
+      let data = JSON.parse(contents.toString());
+
+      data.pokemon = data.pokemon.filter((poke) => poke.id != id);
+
+      fs.writeFile(pokemonFile, JSON.stringify(data), (err) => {
+        if (err) next(err);
+
+        res.json({
+          msg: `Successfully deleted pokemon with id of '${id}'`,
+          when: new Date().toString(),
+        });
+      });
+    });
+  }
+});
+
 module.exports = router;
